@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: {{ kubedash_name }}
+  labels: {{ kubedash_labels }}
+  namespace: {{ kubedash_namespace | default('kube-system') }}
+spec:
+  replicas: {{ kubedash_replicas|default(1) }}
+  selector: {{ kubedash_selector|default(kubedash_labels) }}
+  template:
+    metadata:
+      labels: {{ kubedash_labels }}
+    spec:
+      containers:
+      - name: kubedash
+        image: {{ kubedash_container_image }}
+        resources:
+{% if kubedash_container_limits is defined %}
+          limits:
+{% if kubedash_container_limits.cpu is defined %}
+            cpu: {{ kubedash_container_limits.cpu }}
+{% endif %}
+{% if kubedash_container_limits.memory is defined %}
+            memory: {{ kubedash_container_limits.memory }}
+{% endif %}
+{% endif %}
+{% if kubedash_container_command is defined %}
+        command: {{ kubedash_container_command|to_json }}
+{% endif %}
+{% if kubedash_container_args is defined %}
+        args: {{ kubedash_container_args|to_json }}
+{% endif %}
+{% if kubedash_container_env is defined %}
+        env:
+{% for env in kubedash_container_env %}
+          - name: "{{ env.name }}"
+            value: "{{ env.value }}"
+{% endfor %}
+{% endif %}
+{% if kubedash_container_volumeMounts is defined %}
+        volumeMounts: {{ kubedash_container_volumeMounts }}
+{% endif %}
+{% if kubedash_container_ports is defined %}
+        ports: {{ kubedash_container_ports }}
+{% endif %}
+{% if kubedash_container_livenessprobe is defined %}
+        livenessProbe: {{ kubedash_container_livenessprobe }}
+{% endif %}
+{% if kubedash_container_readinessprobe is defined %}
+        readinessProbe: {{ kubedash_container_readinessprobe }}
+{% endif %}
+{% if kubedash_volumes is defined %}
+      volumes: {{ kubedash_volumes }}
+{% endif %}
+{% if kubedash_nodeselector is defined %}
+      nodeSelector: {{ kubedash_nodeselector }}
+{% endif %}

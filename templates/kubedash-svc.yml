@@ -1,0 +1,17 @@
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: {{ kubedash_name }}
+  namespace: {{ kubedash_namespace | default('kube-system') }}
+  labels: {{ kubedash_labels }}
+spec:
+  selector: {{ kubedash_selector|default(kubedash_labels) }}
+{% if kubedash_svc_type is defined %}
+  type: {{ kubedash_svc_type }}
+{% endif %}
+{% if kubedash_clusterIP is defined %}
+  clusterIP:  {{ kubedash_clusterIP }}
+{% endif %}
+{% if kubedash_svc_ports is defined %}
+  ports: {{ kubedash_svc_ports }}
+{% endif %}

@@ -1,0 +1,10 @@
+---
+
+kubedash_resources:
+  - file: kubedash-rc.yml
+    resource: rc
+    name: kubedash
+
+  - file: kubedash-svc.yml
+    resource: svc
+    name: kubedash

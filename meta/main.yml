@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: Antoine Legrand
+  description:
+  license: MIT
+  min_ansible_version: 1.8
+dependencies:
+  - role: apps/k8s-common
+    src: https://github.com/ansibl8s/k8s-common.git

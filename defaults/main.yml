@@ -1,0 +1,47 @@
+---
+# # Limit resources if necessary (should be done by limit_ranges on namespaces)
+
+
+kubedash_manifests_dir: /etc/k8s/manifests/kubedash
+
+kubedash_name: kubedash
+kubedash_replicas: 1
+
+
+kubedash_labels:
+  k8s-app: kubedash
+
+kubedash_selector:
+  k8s-app: kubedash
+
+# CONTAINER 1
+kubedash_container_image: "gcr.io/google_containers/kubedash:v0.2.1"
+
+kubedash_container_command:
+  - /kubedash
+
+kubedash_container_volumeMounts:
+  - name: "ssl-certs"
+    mountPath: "/etc/ssl/certs"
+    readOnly: true
+
+kubedash_container_limits:
+  cpu: 50m
+  memory: 100Mi
+##
+
+# SERVICE 1
+kubedash_svc_ports:
+  - name: kubedash
+    port: 80
+    targetPort: 8289
+    protocol: TCP
+    nodePort: 30721
+
+kubedash_svc_type: NodePort
+
+# VOLUMES
+kubedash_volumes:
+  - name: "ssl-certs"
+    hostPath:
+      path: "/etc/ssl/certs"
