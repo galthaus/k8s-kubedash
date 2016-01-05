@@ -5,3 +5,4 @@
     k8s_manifests_dir: '{{kubedash_manifests_dir}}'
     k8s_resources: '{{kubedash_resources}}'
     k8s_namespace: "{{ kubedash_namespace | default('kube-system') }}"
+  when: inventory_hostname == "{{ groups['kube-master'][0] }}"
